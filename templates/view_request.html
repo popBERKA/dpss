@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}View Request{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h1>View Request</h1>
+        <p><a href="{{ url_for('user_requests') }}" class="btn btn-secondary mb-3">Back to My Requests</a></p>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ support_request.subject }}</h5>
+                <p class="card-text">{{ support_request.message }}</p>
+                <p class="card-text"><small class="text-muted">Status: {{ support_request.status }}</small></p>
+                <h5>User Information</h5>
+                <p class="card-text"><strong>Full Name:</strong> {{ support_request.full_name }}</p>
+                <p class="card-text"><strong>Email:</strong> {{ support_request.email }}</p>
+                <p class="card-text"><strong>Phone Number:</strong> {{ support_request.phone_number }}</p>
+                <p class="card-text"><strong>Office Number:</strong> {{ support_request.office_number }}</p>
+            </div>
+        </div>
+        <h3>Comments</h3>
+        {% if support_request.status != 'Completed' %}
+            <form method="POST" action="{{ url_for('view_request', request_id=support_request.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.content.label(class="form-control-label") }}
+                    {{ form.content(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        {% else %}
+            <p class="text-muted">This request has been closed. No further comments can be added.</p>
+        {% endif %}
+        <ul class="list-group mt-3">
+            {% for comment in comments %}
+            <li class="list-group-item">
+                <p><strong>{{ comment.user.full_name }}</strong> at {{ comment.timestamp.strftime('%H:%M') }}</p>
+                <p>{{ comment.content }}</p>
+                <p><small class="text-muted">{{ comment.timestamp }}</small></p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% if support_request.status != 'Completed' %}
+            <form method="POST" action="{{ url_for('close_request', request_id=support_request.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">Close Request</button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Active Chats{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h1>Active Chats</h1>
+        <p><a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Back to Home</a></p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>User</th>
+                    <th>View Chat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in active_requests %}
+                <tr>
+                    <td>{{ request.id }}</td>
+                    <td>{{ request.subject }}</td>
+                    <td>{{ request.user.full_name }}</td>
+                    <td>
+                        <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Chat</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to the Support Site!</h1>
+        <p class="lead">This is a simple support site where you can create support requests and get assistance from our team.</p>
+        <hr class="my-4">
+        {% if current_user.is_authenticated %}
+            {% if current_user.username == 'Admin' %}
+                <p>To get started, please navigate to the Admin Panel or view Active Chats.</p>
+                <a class="btn btn-primary btn-lg" href="{{ url_for('admin_panel') }}" role="button">Admin Panel</a>
+                <a class="btn btn-secondary btn-lg" href="{{ url_for('active_chats') }}" role="button">Active Chats</a>
+            {% else %}
+                <p>To get started, please create a new support request or view your existing requests.</p>
+                <a class="btn btn-primary btn-lg" href="{{ url_for('create_request') }}" role="button">Create Request</a>
+                <a class="btn btn-secondary btn-lg" href="{{ url_for('user_requests') }}" role="button">My Requests</a>
+            {% endif %}
+        {% else %}
+            <p>To get started, please register or login.</p>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Register</a>
+            <a class="btn btn-secondary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
+        {% endif %}
+    </div>
+{% endblock %}
